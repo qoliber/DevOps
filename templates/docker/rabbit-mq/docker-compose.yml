@@ -1,0 +1,26 @@
+version: "2"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: "rabbitmq"
+    hostname: rabbitmq
+    restart: always
+    ports:
+      - "127.0.0.1:15672:15672"
+      - "127.0.0.1:5672:5672"
+    tty: true
+    volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - rabbit1:/var/lib/rabbitmq
+      - ./conf/:/etc/rabbitmq/
+    command:  bash -c "sleep 10; rabbitmq-server;"
+    networks:
+      - rabbitmq
+
+networks:
+  rabbitmq:
+    driver: bridge
+
+volumes:
+  rabbit1:
+    driver: local

@@ -1,0 +1,31 @@
+version: '2.2'
+services:
+  {{user}}_opensearch:
+    restart: always
+    image: opensearchproject/opensearch:latest
+
+    container_name: {{user}}_opensearch
+    environment:
+      - cluster.name={{user}}-opensearch-docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - os7-{{user}}:/usr/share/elasticsearch/data
+    ports:
+      - "127.0.0.1:{{port}}:9200"
+    networks:
+      - elastic_{{user}}_opensearch
+
+volumes:
+  os7-{{user}}:
+    driver: local
+
+networks:
+  elastic_{{user}}_opensearch:
+    driver: bridge
+

@@ -1,0 +1,9 @@
+version: "3"
+services:
+  mailhog:
+    container_name: 'mailhog'
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - '127.0.0.1:1025:1025'
+      - '127.0.0.1:8025:8025'

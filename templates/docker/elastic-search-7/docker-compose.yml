@@ -1,0 +1,40 @@
+version: '2.2'
+services:
+  {{user}}_es7:
+    restart: always
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.21
+
+    container_name: {{user}}_es7
+    environment:
+      - cluster.name={{user}}-es7-docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data7-{{user}}:/usr/share/elasticsearch/data
+    ports:
+      - "127.0.0.1:{{port}}:9200"
+    networks:
+      - elastic_{{user}}_es7
+
+  {{user}}-eshq77:
+    restart: always
+    image: elastichq/elasticsearch-hq
+    container_name: {{user}}-eshq-7
+    networks:
+      - elastic_{{user}}_es7
+    ports:
+      - "127.0.0.1:{{es7hq_port}}:5000"
+
+volumes:
+  data7-{{user}}:
+    driver: local
+
+networks:
+  elastic_{{user}}_es7:
+    driver: bridge
+

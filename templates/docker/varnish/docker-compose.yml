@@ -1,0 +1,19 @@
+version: '3.0'
+services:
+  {{user}}-varnish:
+    restart: always
+    image: varnish:stable                                                                                                  
+    container_name: {{user}}-varnish
+    volumes:
+      - ./default.vcl:/etc/varnish/default.vcl
+      - ./varnish:/etc/default/varnish
+    ports:
+      - "127.0.0.1:{{port}}:80"
+      - "127.0.0.1:{{port_admin}}:6082"
+    networks:
+      - varnish-{{user}}-network
+
+networks:
+  varnish-{{user}}-network:
+    driver: bridge
+
